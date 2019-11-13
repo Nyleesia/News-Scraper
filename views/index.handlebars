@@ -1,26 +1,23 @@
 <div  class="container-wrap-wrap" id="allArticles">
 
     {{#each article}}
-        <hr>
+
         <div class="card" id="articleCard">
             <div class="card-header">
                 <h3 class="card-title">{{this.title}}</h3>
             </div>
-            <hr>
+
             <div class="card-body">
                 <div class="media"> 
-                    <div class="media-body">
+                    <span class="teaser">
                         <h6 class="mt-0 mb-1">{{this.teaser}}</h6>
-                    </div>
-                        <img src="{{this.img}}" class="ml-3" alt="No Image" onerror="this.src='https://1.bp.blogspot.com/-Wra-8gs62ks/WVUqCvyteFI/AAAAAAAAHAk/ZBjQ7ukNoF88i_KO05hTbN3tnuVlyFkNwCLcBGAs/s1600/npr_news_icon.png';" style="width:200px; height:200px"></img>
+                    </span>
+                    <span class= "image"><img src="{{this.img}}" class="ml-3" alt="No Image" onerror="this.src='https://1.bp.blogspot.com/-Wra-8gs62ks/WVUqCvyteFI/AAAAAAAAHAk/ZBjQ7ukNoF88i_KO05hTbN3tnuVlyFkNwCLcBGAs/s1600/npr_news_icon.png';" style="width:200px; height:200px"></img></span>   
                 </div>   
                 <br>
                 <div>
-                    {{!-- <span>
-                        <i class="far fa-bookmark btn text-info" id="bookmark"></i>
-                    </span> --}}
                     <span>
-                       <div><a href="{{this.link}}" class="btn btn-primary"><h4>Read Full Article from:<img class="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/National_Public_Radio_logo.svg/1200px-National_Public_Radio_logo.svg.png" style="width:150px;height:50px">WORLD NEWS</h4></a></div>
+                       <div ><a href="{{this.link}}" class="btn btn-primary follow"><h4>Read Full Article from: &nbsp <img class="read" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/National_Public_Radio_logo.svg/1200px-National_Public_Radio_logo.svg.png" style="width:75px;height:25px">  WORLD NEWS</h4></a></div>
                     </span>
                 </div>
             </div>
