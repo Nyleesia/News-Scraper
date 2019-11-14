@@ -45,3 +45,8 @@ db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
   console.log(`Connected to MongoDB.`);
 });
+
+app.get("/",(req,res)=>{
+  console.log("")
+  res.render("index");
+})

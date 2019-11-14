@@ -73,23 +73,11 @@ body {
   border-top: 0px;
   border-bottom: 0px;
   padding: 20px;
-  width: 70%;
+  width: 100%;
   height: 750px;
   display: fixed;
   overflow: auto;
   float: left;
-}
-
-#comments {
-  border: lightblue 0.05px solid;
-  border-top: 0px;
-  border-bottom: 0px;
-  padding: 20px;
-  width: 70%;
-  height: 750px;
-  display: fixed;
-  overflow: auto;
-  float: right;
 }
 
 textarea, input {
@@ -152,6 +140,10 @@ footer .copyright{
   font-weight: bolder;
 }
 
+.commentcard {
+  margin-top: 30px;
+}
+
 .fa-arrow-alt-circle-up{
   border: none;
 }
@@ -209,4 +201,102 @@ footer .copyright{
 
 .follow h4{
   display: inline;
+}
+
+.commentblock {
+  height: 200px;
+  display:none;
+}
+
+#commentBtn{
+  background-color: indianred;
+  color: white; 
+  font-size: 14px; 
+  padding: 5px;
+  border: indianred solid 1px;
+  border-radius: 5px 5px 5px 5px;
+  margin-left: 10px;
+  display: inline;
+}
+
+#removeBtn{
+  background-color: indianred;
+  color: white; 
+  font-size: 14px; 
+  padding: 5px;
+  border: indianred solid 1px;
+  border-radius: 5px 5px 5px 5px;
+  margin-left: 5px;
+  display: inline;
+}
+
+#base {
+  display: flex; 
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+}
+
+.commentblock{
+  display: flex; 
+  flex-direction: row;
+  align-items: flex-start;
+  margin: 10px;
+  border-top: 1px solid cadetblue;
+  padding: 10px;
+}
+
+.commentHead h4{
+  font-style: normal;
+  font-weight: bold;
+}
+
+#commentBody{
+  background-color: white;
+  color: black;
+  border: black 1px solid;
+  padding: 5px;
+}
+
+.commentForm{
+  display: flex; 
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 10px;
+  padding: 10px;
+}
+
+.subBtn{
+  background-color: dodgerblue;
+  color: white; 
+  font-size: 14px; 
+  padding: 5px;
+  border: dodgerblue solid 1px;
+  border-radius: 5px 5px 5px 5px;
+  margin-left: 5px;
+  display: inline;
+}
+
+#delBtn{
+  background-color: dodgerblue;
+  color: white; 
+  font-size: 14px; 
+  padding: 5px;
+  border: dodgerblue solid 1px;
+  border-radius: 5px 5px 5px 5px;
+  margin-left: 5px;
+  display: inline;
+}
+
+.commentcard{
+  display: flex;
+  flex-direction: column;
+  border: lightblue 0.05px solid;
+  border-top: 0px;
+  border-bottom: 0px;
+  padding: 10px;
+  width: 100%;
+  display: fixed;
+  overflow: auto;
+  float: left;
 }

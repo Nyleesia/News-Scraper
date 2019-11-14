@@ -4,9 +4,10 @@
         <div class = "navbar">
                 <span class="navbar-item"> <a class="navbar-item" href="/"> <h1> NPR Scraped:</h1> </a><h2>All News. All Day.</h2> </span>
                 <div class = "navButtons">
-                    <div class = "navButtons"><button class = "btn scrape" id = "scrape" href = "/scrape"> Scrape The Latest News</button></div>
-                    <div class = "navButtons"><button class = "btn clear"  id = "clear" href = "/clear"> Clear Articles </button></div>
-                    <div class = "navButtons"><button class = "btn delete" id = "delete" href = "/deleteAll"> Delete Articles Collection</button></div>
+                    <div class = "navButtons"> <a class = "btn scrape" id = "scrape"  action = "/" method = "GET" href = "/scrape"> Scrape The Latest News </a>
+                    </div>
+                    <div class = "navButtons"> <a class = "btn delete" id = "delete"  action = "/" method = "GET" href = "/deleteAll"> Clear Articles </a>
+                    </div>
                 </div>
         </diV>
     </nav>

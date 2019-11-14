@@ -5,21 +5,11 @@ const path = require("path");
 const request = require("request");
 const cheerio = require("cheerio");
 const axios = require("axios");
-console.log("controller/index.js => got dependencies.");
+console.log("controller/index.js => got dependencies."); 
 
 // Get models
-const DB = require("../models/index.js");
-console.log (DB);
+const DB = require("../models");
 console.log("controller/index.js => got models.");
-
-
-//////////////////Adding and retrieving articles////////////////////
-
-// Route to get all articles
-router.get("/", (req, res) => {
-    res.redirect("/articles");
-
-});
 
 // Route to scrape new articles
 router.get("/scrape", (req, res) => {
@@ -45,105 +35,118 @@ router.get("/scrape", (req, res) => {
           console.log(err);
         });
     });
-    res.redirect("/");
+    res.redirect("/articles");
 
   });
 });
 
-//Get articles at articles route
-router.get("/articles", (req, res) => {
-  DB.Article.find()
-    .sort({ _id: 1 })
-    .exec((err, doc) => {
-      if (err) {
-        console.log(err);
-      } else {
-        let view = { article: doc };
-        res.render("index", view);
-        console.log(view);
-      }
-    });
-});
+  // Get articles on landing page
+  // router.get("/", (req, res) => {
+  //   res.redirect("/articles");
+  // });
 
-router.get("/deleteAll", function(req, res) {
-  DB.Article.deleteMany({}, function(err, doc) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("removed all articles");
-    }
+  router.get("/comments/:id", function(req, res) {
+    let articleId = req.params.id;
+    // Find all Notes
+    DB.Comment.find({})
+      .then(function(dbComment) {
+        // If all Notes are successfully found, send them back to the client
+        res.json(dbComment);
+      })
+      .catch(function(err) {
+        // If an error occurs, send the error back to the client
+        res.json(err);
+      });
   });
-  res.redirect("/");
-
-});
 
 
-//////////////Adding, updating and retrieving comments/////////////////
-
-router.get("/readArticle/:id", function(req, res) {
-  let articleId = req.params.id;
-  let hbsObj = {
-    article: [],
-    body: []
-  };
-
-  DB.Articles.findOne({ _id: articleId })
-    .populate("comment")
-    .exec(function(err, doc) {
-      if (err) {
-        console.log("Error: " + err);
-      } else {
-        hbsObj.article = doc;
-        var link = doc.link;
-        request(link, function(error, response, html) {
-          var $ = cheerio.load(html);
-
-          $(".l-col__main").each(function(i, element) {
-            hbsObj.body = $(this)
-              .children(".c-entry-content")
-              .children("p")
-              .text();
-
-            res.render("article", hbsObj);
-            return false;
-          });
-        });
-      }
-    });
-});
-router.post("/comment/:id", function(req, res) {
-  var user = req.body.name;
-  var content = req.body.comment;
-  var articleId = req.params.id;
-
-  var commentObj = {
-    name: user,
-    body: content
-  };
-
-  var newComment = new Comment(commentObj);
-
-  newComment.save(function(err, doc) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(doc._id);
-      console.log(articleId);
-
-      DB.Articles.findOneAndUpdate(
-        { _id: req.params.id },
-        { $push: { comment: doc._id } },
-        { new: true }
-      ).exec(function(err, doc) {
+  //Get articles at articles route
+  router.get("/articles", (req, res) => {
+    DB.Article.find()
+      .sort({ _id: 1 })      
+      .populate("comment")
+      .exec((err, doc) => {
         if (err) {
           console.log(err);
         } else {
-          res.redirect("/readArticle/" + articleId);
+          let view = { article: doc };
+          res.render("index", view);
+          console.log(view);
         }
       });
-    }
   });
-});
 
-//   Export routes
+  // Empty the database
+  router.get("/deleteAll", function(req, res) {
+    DB.Article.deleteMany({}, function(err, doc) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("All Articles Deleted");
+      }
+    });
+    res.redirect("/articles");
+  });
+  
+  // Delete article by ID
+  router.get("/deleteArticle/:id", function(req, res) {
+    let articleId = req.params.id;
+    DB.Article.findOneAndRemove({ _id: articleId }, function (err, doc){
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Article Deleted");
+      }
+    })
+    res.redirect("/articles");
+  });
+
+
+  // Add a comment to an article
+  router.post("/addComment/:id", function(req, res) {
+    let artId = req.params.id;
+    DB.Comment.create(req.body)
+      .then(function (dbComment){
+        console.log(dbComment)
+        return DB.Article.findOneAndUpdate({_id: artId}, { $push: { comment: dbComment._id } }, { new: true });
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+
+    res.redirect("/articles");
+  });
+
+    // Update a comment 
+    // router.put("/updateComment/:id", function(req, res) {
+    //   let commentId = req.params.id;
+    //   let commentText = req.body.commentBody;
+    //   let comment = {comment : commentText}
+
+    //   DB.Comment.findOneAndUpdate({ commentId, $set : { comment : comment } }, function (err, doc){
+    //     if (err) {
+    //       console.log(err);
+    //     } else {
+    //       console.log("Update Saved");
+    //     }
+    //   })
+    //   res.redirect("/articles");
+    // });
+
+    // Delete a comment 
+    router.get("/deleteComment/:id", function(req, res) {
+      let commentId = req.params.id;
+      DB.Comment.findOneAndRemove({ _id: commentId }, function (err, doc){
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Comment Deleted");
+        }
+      })
+      res.redirect("/articles");
+    });
+
+   
+
+  //   Export routes
   module.exports = router;

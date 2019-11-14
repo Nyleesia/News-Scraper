@@ -1,3 +1,5 @@
+{{!-- Sets up a card for each article --}}
+
 <div  class="container-wrap-wrap" id="allArticles">
 
     {{#each article}}
@@ -17,58 +19,42 @@
                 <br>
                 <div>
                     <span>
-                       <div ><a href="{{this.link}}" class="btn btn-primary follow"><h4>Read Full Article from: &nbsp <img class="read" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/National_Public_Radio_logo.svg/1200px-National_Public_Radio_logo.svg.png" style="width:75px;height:25px">  WORLD NEWS</h4></a></div>
+                       <span id = "base"><a href="{{this.link}}" class="btn btn-primary follow"><h4>Read Full Article @ <img class="read" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/National_Public_Radio_logo.svg/1200px-National_Public_Radio_logo.svg.png" style="width:75px;height:25px">  WORLD NEWS</h4></a>
+                       <a id = "commentBtn" onclick='$("#commentblock{{this.id}}").toggle()' class = "btn" > Comments </a>                
+                       <a id = "removeBtn" class = "btn" method = "GET" href = "/deleteArticle/{{this.id}}"> Remove Article </a> </span>
                     </span>
-                </div>
             </div>
         </div>
 
-        {{/each}}
+            <div id="commentblock{{this.id}}" class="card commentblock">
+                <div class = "commentForm">
+                    <form action="/addComment/{{this.id}}" method="POST" class="card-panel">
+                    <div class="input-field">
+                        <i class="commentHead"><h4>Add Comment</h4></i>
+                        <input id="commentBody" type="text" placeholder="Enter text" name="commentBody" class="">
+                    </div>
+                    <div class="btn">
+                        <center><input class="btn subBtn" type="submit" value="Submit"></center>
+                    </div>
+                </form>
+                </div>
+
+                {{#if this.comment}}
+                {{#each this.comment}}
+                
+            <div> 
+                <div class="card commentcard">
+                    <p>{{this.commentBody}}</p>
+                        <a id = "delBtn" class = "btn" method = "GET" href = "/deleteComment/{{this.id}}"> Delete Comment  </a>
+                </div>
+            </div>        
+                {{/each}}
+
+                {{else}}
+                    <h5>This article has no comments.</h5>
+                {{/if}}
+        </div>
+            {{/each}}
+    </div>
 
 </div>
-       
-
-<script>
-
- $("#scrape").click(function(){
-        $.ajax({
-            type: "GET",
-            url: "/scrape"
-        }).then( () => {
-            document.location.reload();
-        }).catch({
-            if (err){
-                console.log (err);
-            }
-        })
-    });
-
-
-    $("#clear").click(function(){
-        let Retrieve = (`<button class = "btn btn-warning" id = "retrieve" href = "/articles"> Retrieve Articles </button>`)
-        $("#allArticles").empty();
-        $("#clear").replaceWith(`${Retrieve}`);
-    });
-
-    $(Retrieve).click(function(){
-        let Retrieve = (`<button class = "btn btn-warning" id = "retrieve" href = "/articles"> Retrieve Articles </button>`)
-        $("#allArticles").empty();
-        $("#Retrieve").replaceWith("#clear");
-    });
-
-    
-    $("#delete").click(function(){
-        $.ajax({
-            type: "GET",
-            url: "/deleteAll"
-        }).then( () => {
-            document.location.reload();
-        }).catch({
-            if (err){
-                console.log (err);
-            }
-        })
-    });
-   
-</script>
-       
